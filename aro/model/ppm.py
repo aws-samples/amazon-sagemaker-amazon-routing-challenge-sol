@@ -79,10 +79,6 @@ class PPM(object):
     ):
         #C-17.3D
         if consider_hierarchy:
-            # C-17D
-            # pre_c_seq = [x.split(".")[0] + x[-1] for x in preceding_zone_list]
-            # fol_c_z = following_zone.split(".")[0] + following_zone[-1]
-
             # C
             pre_c_seq = [x[0] for x in preceding_zone_list]
             fol_c_z = following_zone[0]
