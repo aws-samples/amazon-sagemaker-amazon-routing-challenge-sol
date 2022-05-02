@@ -5,6 +5,7 @@ This Git repository showcases our solution to the [Amazon Last Mile Routing Rese
 <img src="method.png" alt="An overview of our method" width="800"/>
 
 # Quick Start
+The Quick Start instructions below are based on `macOS` and `Linux` OS with [AWS CLI installed](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
 
 ## 1. Install
 ```bash
@@ -118,4 +119,4 @@ Once the submission file is downloaded, follow the evaluation instructions at ht
 to calculate the evaluation score, which should be around `0.0372` ~ `0.0376`
 
 ## 11. Integrate this example into your last mile routing applications
-If you are intereted in knowing more about this example, please feel free to [contact us](https://github.com/chenwuperth).
+If you are intereted in the applications of this example, please feel free to [contact us](https://github.com/chenwuperth).
