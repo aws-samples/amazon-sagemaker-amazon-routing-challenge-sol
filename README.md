@@ -70,7 +70,8 @@ ${train_or_eval_data_dir}                # e.g. `Final_March_15_Data` OR `Final_
     ├── ${route_id_0}_zone_w_st.joblib   # zone file produced by preprocessing.py            
     ├── ...                              # more zone files
     ├── ${route_id_N}_zone_w_st.joblib   # the last zone file
-    └── actual_zone-{mode}.csv           # ground-truth zone sequence file produced by preprocessing.py
+    └── actual_zone-{mode}.csv           # ground-truth zone sequence file produced 
+                                         # by preprocessing.py
 ```
 
 ## 5. Train the PPM model
@@ -106,7 +107,7 @@ Now we are ready to generate routes by submititng an Amazon SageMaker processing
 Once submission is successful, we can open the Amazon SageMaker Processing jobs console to check if a job named `ppm-rollout-2022-xxx` is indeed running.
 
 ## 9. Check submission file
-It should take less than 60 minutes to complete the processing job. Once the job status becomes 'completed', we can check the generated sequences for all routes by running the following command,
+It generally takes less than 60 minutes to complete the processing job on an `ml.m5.4xlarge` instance. Once the job status becomes `completed`, we can check the generated sequences for all routes by running the following command.
 ```bash
 aws s3 ls \
  s3://${bucket_name}/data/${s3_data_prefix}/${eval_data_dir}/model_apply_outputs/eval-ppm-rollout
