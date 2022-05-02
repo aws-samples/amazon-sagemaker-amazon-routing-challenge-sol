@@ -55,22 +55,22 @@ aws s3 sync data/${eval_data_dir}/ s3://${bucket_name}/data/${s3_data_prefix}/${
 ```
 After completing this step, the prefix structure in your S3 bucket appears as follows:
 ``` bash
-└── ${train_or_eval_data_dir}                   # e.g. `Final_March_15_Data` OR `Final_June_18_Data`
-    ├── distance_matrix/                        # a directory with all distance matrix files
-    │   ├── ${route_id_0}_raw_w_st.npy          # distance matrix file produced by preprocessing.py 
-    │   ├── ...                                 # more distance matrix files
-    │   └── ${route_id_N}_raw_w_st.npy          # distance matrix file
-    ├── model_apply_inputs/                     # challenge input files
-    ├── model_apply_outputs/                    # output json results here
-    ├── model_build_inputs/                     # challenge input files
-    ├── model_score_inputs/                     # challenge input files
-    ├── model_score_outputs/                    # output json score here
-    ├── processed/                              # output processed parquet file here
-    └── zone_list                               # A directory with all zone files
-        ├── ${route_id_0}_zone_w_st.joblib      # zone file produced by preprocessing.py            
-        ├── ...                                 # more zone files
-        ├── ${route_id_N}_zone_w_st.joblib      # the last zone file
-        └── actual_zone-{mode}.csv              # ground-truth zone sequence file produced by preprocessing.py
+${train_or_eval_data_dir}                # e.g. `Final_March_15_Data` OR `Final_June_18_Data`
+├── distance_matrix/                     # a directory with all distance matrix files
+│   ├── ${route_id_0}_raw_w_st.npy       # distance matrix file produced by preprocessing.py 
+│   ├── ...                              # more distance matrix files
+│   └── ${route_id_N}_raw_w_st.npy       # distance matrix file
+├── model_apply_inputs/                  # challenge input files
+├── model_apply_outputs/                 # output json results here
+├── model_build_inputs/                  # challenge input files
+├── model_score_inputs/                  # challenge input files
+├── model_score_outputs/                 # output json score here
+├── processed/                           # output processed parquet file here
+└── zone_list                            # A directory with all zone files
+    ├── ${route_id_0}_zone_w_st.joblib   # zone file produced by preprocessing.py            
+    ├── ...                              # more zone files
+    ├── ${route_id_N}_zone_w_st.joblib   # the last zone file
+    └── actual_zone-{mode}.csv           # ground-truth zone sequence file produced by preprocessing.py
 ```
 
 ## 5. Train the PPM model
@@ -83,7 +83,8 @@ python train.py --train_zdf_fn data/${train_data_dir}/zone_list/actual_zone-trai
 ## 6. Upload the trained model to S3
 We upload the PPM model to S3 so that the subsequent SageMake processing job can access the model for zone sequence generation.
 ```bash
-export s3_model_prefix=almrc # optional - set `${s3_model_prefix}` with your own S3 model prefix
+# optional - set `${s3_model_prefix}` with your own S3 model prefix
+export s3_model_prefix=almrc 
 aws s3 cp aro_ppm_train_model.joblib s3://${bucket_name}/models/${s3_model_prefix}/
 ```
 
@@ -98,7 +99,8 @@ Change your script accordingly as per any debugging information revealed in the 
 ## 8. Run route generation as a SageMaker processing job
 Now we are ready to generate routes by submititng an Amazon SageMaker processing job running on a `ml.m5.4xlarge` instance.
 ```bash
-# please set environment variables (e.g. ${bucket_name}) in `example_inference_job.sh` before running it
+# please set environment variables (e.g. ${bucket_name}) 
+# in `example_inference_job.sh` before running it
 ./example_inference_job.sh
 ```
 Once submission is successful, we can open the Amazon SageMaker Processing jobs console to check if a job named `ppm-rollout-2022-xxx` is indeed running.
@@ -106,7 +108,8 @@ Once submission is successful, we can open the Amazon SageMaker Processing jobs 
 ## 9. Check submission file
 It should take less than 60 minutes to complete the processing job. Once the job status becomes 'completed', we can check the generated sequences for all routes by running the following command,
 ```bash
-aws s3 ls s3://${bucket_name}/data/${s3_data_prefix}/${eval_data_dir}/model_apply_outputs/eval-ppm-rollout
+aws s3 ls \
+ s3://${bucket_name}/data/${s3_data_prefix}/${eval_data_dir}/model_apply_outputs/eval-ppm-rollout
 ```
 
 ## 10. Get evaluation scores
@@ -114,4 +117,4 @@ Once the submission file is downloaded, follow the evaluation instructions at ht
 to calculate the evaluation score, which should be around `0.0372` ~ `0.0376`
 
 ## 11. Integrate this example into your last mile routing applications
-If you are intereted in this example and its applications, please feel free to [contact us](https://github.com/chenwuperth).
+If you are intereted in knowing more about this example, please feel free to [contact us](https://github.com/chenwuperth).
