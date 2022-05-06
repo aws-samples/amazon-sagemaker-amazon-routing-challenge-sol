@@ -7,7 +7,7 @@ This Git repository showcases our solution to the [Amazon Last Mile Routing Rese
 # Quick Start
 The Quick Start instructions below are based on `macOS` and `Linux` OS with [AWS CLI installed](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
 
-## 1. Install
+## Step 1. Install
 ```bash
 # Get the source code
 git clone https://github.com/aws-samples/amazon-sagemaker-amazon-routing-challenge-sol.git
@@ -24,11 +24,11 @@ pip install -r requirements_dev.txt
 pip install -e .
 ```
 
-## 2. Obtain data
-Register at https://registry.opendata.aws/ in order to download the Challenge data. More specific instructions are comging soon.
+## Step 2. Obtain data
+More specific instructions will be provided here once the dataset associated with the [Amazon Last Mile Routing Research Challenge](https://routingchallenge.mit.edu/) is made publicly avaialble at [Open Data on AWS](https://registry.opendata.aws/). 
 The following code snippets assume you have downloaded the `train` and `evaluation` datasets to your local machine at `/tmp/Final_March_15_Data` and `/tmp/Final_June_18_Data` respectively.
 
-## 3. Preprocess data
+## Step 3. Preprocess data
 ```bash
 train_data_dir=Final_March_15_Data
 eval_data_dir=Final_June_18_Data
@@ -47,7 +47,7 @@ python preprocessing.py --act gen_dist_mat --data_dir  data/${eval_data_dir}
 python preprocessing.py --act gen_zone_list --data_dir  data/${eval_data_dir}
 ```
 
-## 4. Upload pre-processed data to S3
+## Step 4. Upload pre-processed data to S3
 ```bash
 export bucket_name=my-route-bucket # set `${bucket_name}` to your own S3 bucket name
 export s3_data_prefix=lmc # set `${s3_data_prefix}` to your own S3 data prefix
@@ -75,14 +75,14 @@ ${train_or_eval_data_dir}                # e.g. `Final_March_15_Data` OR `Final_
                                          # by preprocessing.py
 ```
 
-## 5. Train the PPM model
+## Step 5. Train the PPM model
 This step trains the [Prediction by Partial Matching (PPM for short)](https://en.wikipedia.org/wiki/Prediction_by_partial_matching) model. In our work, the PPM model is used as a sequential probability model for generating synthetic zone sequences.
 ```bash
 # train the PPM model
 python train.py --train_zdf_fn data/${train_data_dir}/zone_list/actual_zone-train.csv
 ```
 
-## 6. Upload the trained model to S3
+## Step 6. Upload the trained model to S3
 We upload the PPM model to S3 so that the subsequent SageMake processing job can access the model for zone sequence generation.
 ```bash
 # optional - set `${s3_model_prefix}` with your own S3 model prefix
@@ -90,7 +90,7 @@ export s3_model_prefix=almrc
 aws s3 cp aro_ppm_train_model.joblib s3://${bucket_name}/models/${s3_model_prefix}/
 ```
 
-## 7. Run route generation locally
+## Step 7. Run route generation locally
 We run the inferernce for route generation locally (e.g. on your laptop or desktop) for the purpose of debugging or understanding the inner workings of our approach.
 ```bash
 # test inference locally
@@ -98,7 +98,7 @@ We run the inferernce for route generation locally (e.g. on your laptop or deskt
 ```
 Change your script accordingly as per any debugging information revealed in the output or error statements.
 
-## 8. Run route generation as a SageMaker processing job
+## Step 8. Run route generation as a SageMaker processing job
 Now we are ready to generate routes by submititng an Amazon SageMaker processing job running on a `ml.m5.4xlarge` instance.
 ```bash
 # please set environment variables (e.g. ${bucket_name}) 
@@ -107,16 +107,26 @@ Now we are ready to generate routes by submititng an Amazon SageMaker processing
 ```
 Once submission is successful, we can open the Amazon SageMaker Processing jobs console to check if a job named `ppm-rollout-2022-xxx` is indeed running.
 
-## 9. Check submission file
+## Step 9. Check submission file
 It generally takes less than 60 minutes to complete the processing job on an `ml.m5.4xlarge` instance. Once the job status becomes `completed`, we can check the generated sequences for all routes by running the following command.
 ```bash
 aws s3 ls \
  s3://${bucket_name}/data/${s3_data_prefix}/${eval_data_dir}/model_apply_outputs/eval-ppm-rollout
 ```
 
-## 10. Get evaluation scores
+## Step 10. Obtain evaluation scores
 Once the submission file is downloaded, follow the evaluation instructions at https://github.com/MIT-CAVE/rc-cli
 to calculate the evaluation score, which should be around `0.0372` ~ `0.0376`
 
-## 11. Integrate this example into your last mile routing applications
-If you are intereted in the applications of this example, please feel free to [contact us](https://github.com/chenwuperth).
+## Step 11. Integrate this example into your last mile routing applications
+If you are intereted in the applications of this example, please feel free to authors.
+* [Chen Wu](https://github.com/chenwuperth)
+* [Yin Song](https://github.com/yinsong1986)
+* [Verdi March](https://github.com/verdimrc)
+
+# Security
+See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+
+# License
+This code is licensed under the Apache-2.0 License. See the LICENSE file.
+This code uses [OR-tools](https://github.com/google/or-tools), which is distributed under the Apache-2.0 License.
