@@ -2,6 +2,12 @@
 
 This is our solution to the [Amazon Last Mile Routing Research Challenge](https://routingchallenge.mit.edu/). The solution runs as an Amazon SageMaker Processing Job, and is based on our paper **[Learning from Drivers to Tackle the Amazon Last Mile Routing Research Challenge](https://arxiv.org/)**. The diagram below shows an overview of our method. Our solution hierarchically integrates [Markov model](https://en.wikipedia.org/wiki/Markov_model) training, online policy search (i.e. [Rollout](https://www.amazon.com/dp/1886529078/)), and a conventional [Traveling Salesperson Problem](https://en.wikipedia.org/wiki/Travelling_salesman_problem) (TSP) solver to produce driver friendly routes during last mile planning. The choice of the underlying TSP solver is flexible. For example, our paper reported the evaluation score of 0.0374 using [LKH](http://akira.ruc.dk/~keld/research/LKH/). This Git repository uses [OR-tools](https://github.com/google/or-tools) for simplicity, and obtains a nearly identical score of 0.0372. These results are comparable to what the top three teams have achieved on the public [leaderboard](https://routingchallenge.mit.edu/last-mile-routing-challenge-team-performance-and-leaderboard/).
 
+The example below shows the 110-stop route sequence produced by our method on the left (*driver friendly*) and by conventional TSP solvers on the right (*cost-optimal*). While the cost optimal route has less travelling time in theory, its 2D plot shows a narrow and sharp V shape that connects stops from and back to the depo (the red circle at the bottom). This may lead the drivers to the misperception that the cost optimal route forces them to reverse course, which is unpleasant to execute in practice.
+| Driver friendly sequence             |  Time optimal sequence |
+:-------------------------:|:-------------------------:
+![](route_driver.png)  |  ![](route_cost.png)
+travel time: 2.01 hours | travel time: 1.80 hours
+
 # Method Overview
 <img src="method.png" alt="An overview of our method" width="800"/>
 
@@ -148,12 +154,6 @@ Once the submission file is downloaded, follow the evaluation instructions at ht
 to calculate the evaluation score, which should be around `0.0372` ~ `0.0376`
 
 ## Step 11. Integrate this example into your last mile routing applications
-The example below shows the 110-stop route sequence produced by our method on the left (*driver friendly*) and by conventional TSP solvers on the right (*cost-optimal*). While the cost optimal route does have less travelling time in theory, it exhibits a very narrow, sharp V shape that connects stops from and back to the depo (the red circle at the bottom). This may lead to misperception or even dissatisfaction that the calculated route has to reverse course in order to cover all stops.
-| Driver friendly routes             |  Cost optimal routes |
-:-------------------------:|:-------------------------:
-![](route_driver.png)  |  ![](route_cost.png)
-travel time: 2.01 hours | travel time: 1.80 hours
-
 If you are considering other potential applications of this example, please feel free to contact the authors.
 * [Chen Wu](https://github.com/chenwuperth)
 * [Yin Song](https://github.com/yinsong1986)
