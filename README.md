@@ -9,7 +9,7 @@ travel time: 2.01 hours | travel time: 1.80 hours
 : *Image caption - Blue solid circles are locations of Amazon delivery packages. Red arrows show the direction for each transit. The **actual depo location** is far down below (out of sight), and is shown as red solid circles for the purpose of visualization. Travel time reported here does not include service time spent at each delivery stop. Road networks are overlaid as gray lines and curves. Note that roadnetwork-mapped driving routes that result from these two sequences are not shown here.*
 
 # Method Overview
-Our solution hierarchically integrates [Markov model](https://en.wikipedia.org/wiki/Markov_model) training, online policy search (i.e. [Rollout](https://www.amazon.com/dp/1886529078/)), and off-the-shelf TSP solvers to produce driver friendly routes for last mile planning. The choice of the underlying TSP solver is flexible. For example, our paper reported the evaluation score of 0.0374 using [LKH](http://akira.ruc.dk/~keld/research/LKH/). This repository uses [OR-tools](https://github.com/google/or-tools) for simpler integration, and obtains a nearly identical score of 0.0372. These results are comparable to what the **top three** teams have achieved on the public [leaderboard](https://routingchallenge.mit.edu/last-mile-routing-challenge-team-performance-and-leaderboard/).
+Our solution hierarchically integrates [Markov model](https://en.wikipedia.org/wiki/Markov_model) training, online policy search (i.e. [Rollout](https://www.amazon.com/dp/1886529078/)), and off-the-shelf TSP solvers to produce driver friendly routes for last mile planning. The choice of the underlying TSP solver is flexible. For example, [our paper]((https://arxiv.org/)) reported the evaluation score of 0.0374 using [LKH](http://akira.ruc.dk/~keld/research/LKH/). This repository uses [OR-tools](https://github.com/google/or-tools) for simpler integration, and obtains a nearly identical score of 0.0372. These results are comparable to what the **top three** teams have achieved on the public [leaderboard](https://routingchallenge.mit.edu/last-mile-routing-challenge-team-performance-and-leaderboard/).
 
 <img src="method.png" alt="An overview of our method" width="800"/>
 
@@ -160,7 +160,7 @@ Now we are ready to generate routes by submititng an Amazon SageMaker processing
 Once submission is successful, we can navigate the browser to the Amazon SageMaker Processing jobs console to check if a job named `ppm-rollout-2022-xxx` is indeed running.
 
 ## Step 9. Check submission file
-It generally takes less than 60 minutes to complete the processing job on an `ml.m5.4xlarge` instance. Once the job status becomes `completed`, we can check the generated sequences for all routes by running the following command.
+It generally takes less than an hour to complete generating 3,052 route sequences on an `ml.m5.4xlarge` instance. Once the job status becomes `completed`, we can check the generated sequences for all routes by running the following command.
 ```bash
 aws s3 ls \
  s3://${bucket_name}/data/${s3_data_prefix}/${eval_data_dir}/model_apply_outputs/eval-ppm-rollout
