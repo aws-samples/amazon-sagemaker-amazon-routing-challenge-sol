@@ -6,7 +6,7 @@ This code repository demonstrates our solution to the [Amazon Last Mile Routing 
 ![](route_driver.png)  |  ![](route_cost.png)
 travel time: 2.01 hours | travel time: 1.80 hours
 
-: *Image caption - Blue solid circles are locations of the packages. Red arrows show the direction for each leg. The **actual depo location** is much further down below and out of sight. So it is shown here as red solid circles for the purpose of illustration.*
+: *Image caption - Blue solid circles are locations of the packages. Red arrows show the direction for each leg. The **actual depo location** is much further down below and out of sight. So it is shown as red solid circles for the purpose of illustration. Road networks are overlaid as gray lines and curves.*
 
 # Method Overview
 Our solution hierarchically integrates [Markov model](https://en.wikipedia.org/wiki/Markov_model) training, online policy search (i.e. [Rollout](https://www.amazon.com/dp/1886529078/)), and off-the-shelf TSP solvers to produce driver friendly routes during last mile planning. The choice of the underlying TSP solver is flexible. For example, our paper reported the evaluation score of 0.0374 using [LKH](http://akira.ruc.dk/~keld/research/LKH/). This Git repository uses [OR-tools](https://github.com/google/or-tools) for simplicity, and obtains a nearly identical score of 0.0372. These results are comparable to what the **top three** teams have achieved on the public [leaderboard](https://routingchallenge.mit.edu/last-mile-routing-challenge-team-performance-and-leaderboard/).
@@ -19,11 +19,32 @@ ppm_model = train_ppm_model(ground_truth)
 # Inference
 for route in all_routes:
     all_stops = []
-    zone_set = get_zone_set(route) # Step 0
+    zone_set = get_zone_set(route)       # Step 0
     sorted_zones = ppm_rollout_sort_zone(zone_set, ppm_model) # Step 1
     for zone in sorted_zones:
-        sorted_stops = LKH(zone)   # Step 2
-        all_stops += sorted_stops  # Step 3
+        sorted_stops = TSP_solve(zone)   # Step 2
+        all_stops += sorted_stops        # Step 3
+```
+
+# Folder structure
+Python source files and shell scripts are structured as follows: 
+``` bash
+${repo_root_directory}         
+└── aro/                       # Name of the Python module of our solution
+    └── model/                 # model files
+        ├── __init__.npy       # empty module file 
+        ├── ortools_helper.py  # interface to invoke the OR-tools TSP solver
+        ├── ppm.py             # implementation of the PPM model
+        └── zone_utils.npy     # Implementation of Step 1 and Step 2
+├── example_inference_job.sh   # submit the route sequence generation as a SageMaker processing job
+├── example_inference.sh       # test route sequence generation locally
+├── inference_job.py           # Submit the inference.py as the source file for the SageMaker processing job
+├── inference.py               # Glue code that combines step 0 to step 4
+├── preprocessing.py           # Generate input files required for training and inference
+├── requirements_dev.txt       # External libraries required to train the PPM models and run inference locally
+├── requirements.txt           # External libraries for running the inference job on SageMaker
+├── setup.py                   # Installation file
+└── train.py                   # Training script to train the PPM model
 ```
 
 # Quick Start
