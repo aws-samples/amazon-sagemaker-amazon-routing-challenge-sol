@@ -182,4 +182,6 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 
 # License
 This code is licensed under the Apache-2.0 License. See the LICENSE file.
+
+# Acknowledgments
 This code uses [OR-tools](https://github.com/google/or-tools), which is distributed under the Apache-2.0 License.
