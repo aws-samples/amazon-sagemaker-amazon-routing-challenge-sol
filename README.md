@@ -36,7 +36,7 @@ ${repo_root_directory}         # e.g. amazon-sagemaker-amazon-routing-challenge-
         ├── __init__.npy       # empty module file 
         ├── ortools_helper.py  # interface to invoke the OR-tools TSP solver
         ├── ppm.py             # implementation of the PPM model
-        └── zone_utils.py     # Implementation of Step 1 and Step 2
+        └── zone_utils.py      # Implementation of Step 1 and Step 2
 ├── example_inference_job.sh   # submit a SageMaker processing job
 ├── example_inference.sh       # test route sequence generation locally
 ├── inference_job.py           # Wrap inference.py as a SageMaker job
