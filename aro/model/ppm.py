@@ -222,7 +222,7 @@ def build_ppm_model(zdf, nb_orders, consider_hierarchy=True, gt_strictly_set=Fal
             gt_c_seq = [x[0] for x in gt_zone_seq]
             my_ppm.add_sequence(gt_c_seq)
 
-            # 17 (or should it be C-17?)
+            # 17
             gt_sc_seq = [x.split(".")[0].split("-")[-1] for x in gt_zone_seq]
             my_ppm.add_sequence(gt_sc_seq)
 
