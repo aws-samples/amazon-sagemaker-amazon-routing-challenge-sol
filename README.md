@@ -36,7 +36,7 @@ ${repo_root_directory}         # e.g. amazon-sagemaker-amazon-routing-challenge-
         ├── __init__.npy       # empty module file 
         ├── ortools_helper.py  # interface to invoke the OR-tools TSP solver
         ├── ppm.py             # implementation of the PPM model
-        └── zone_utils.npy     # Implementation of Step 1 and Step 2
+        └── zone_utils.py     # Implementation of Step 1 and Step 2
 ├── example_inference_job.sh   # submit a SageMaker processing job
 ├── example_inference.sh       # test route sequence generation locally
 ├── inference_job.py           # Wrap inference.py as a SageMaker job
@@ -171,7 +171,7 @@ Once the submission file is downloaded, follow the evaluation instructions at ht
 to calculate the evaluation score, which should be around `0.0372` ~ `0.0376`
 
 ## Step 11. Integrate this example into your last mile planning
-If you are considering potential applications of this example in your last mile planning, please feel free to contact the authors.
+If you are interested in potential applications of this example for your last mile planning, please feel free to contact the authors.
 * [Chen Wu](https://github.com/chenwuperth)
 * [Yin Song](https://github.com/yinsong1986)
 * [Verdi March](https://github.com/verdimrc)
