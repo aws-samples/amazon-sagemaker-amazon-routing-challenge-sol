@@ -218,10 +218,6 @@ def build_ppm_model(zdf, nb_orders, consider_hierarchy=True, gt_strictly_set=Fal
         # C-17.3D
         my_ppm.add_sequence(gt_zone_seq)
         if consider_hierarchy:
-            # C-17D
-            # gt_c_seq = [x.split(".")[0] + x[-1] for x in gt_zone_seq]
-            # my_ppm.add_sequence(gt_c_seq)
-
             # C
             gt_c_seq = [x[0] for x in gt_zone_seq]
             my_ppm.add_sequence(gt_c_seq)
