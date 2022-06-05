@@ -69,18 +69,17 @@ pip install -e .
 ```
 
 ## Step 2. Obtain data
-More specific instructions will be provided here once the dataset associated with the [Amazon Last Mile Routing Research Challenge](https://routingchallenge.mit.edu/) is made publicly avaialble at [Open Data on AWS](https://registry.opendata.aws/). 
-The following code snippets assume you have downloaded the `train` and `evaluation` datasets to your local machine at `/tmp/Final_March_15_Data` and `/tmp/Final_June_18_Data` respectively.
+The dataset associated with the [Amazon Last Mile Routing Research Challenge](https://routingchallenge.mit.edu/) is publicly available at [Open Data on AWS](https://registry.opendata.aws/amazon-last-mile-challenges/). You can run the following command to download it:
+```bash
+aws s3 sync --no-sign-request s3://amazon-last-mile-challenges/almrrc2021/ ./data/
+```
+The total size of the dataset is about 3.1 GB. If the command hangs for some reason, please terminate and re-run it. It will resume downloading from what's left since last try.
 
 ## Step 3. Preprocess data
 The datasets contain package (aka *stop* ) information, such as destination locations, parcel specifications, customer preferred time windows, expected service times, and zone identifiers. The preprocesing step converts this information from JSON to [Parquet](https://parquet.apache.org/) and [Numpy array format](https://numpy.org/doc/stable/reference/generated/numpy.lib.format.html) for easy access.
 ```bash
-train_data_dir=Final_March_15_Data
-eval_data_dir=Final_June_18_Data
-mkdir data
-# please replace the example source directory `/tmp` with actual path for downloaded datasets
-mv /tmp/${train_data_dir} data/
-mv /tmp/${eval_data_dir} data/
+train_data_dir=almrrc2021-data-training
+eval_data_dir=almrrc2021-data-evaluation
 
 # generate package information in Parquet (training)
 python preprocessing.py --act gen_route --data_dir  data/${train_data_dir}
@@ -184,4 +183,5 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 This code is licensed under the Apache-2.0 License. See the LICENSE file.
 
 # Acknowledgments
-This code uses [OR-tools](https://github.com/google/or-tools), which is distributed under the Apache-2.0 License.
+* This code uses [OR-tools](https://github.com/google/or-tools), which is distributed under the Apache-2.0 License.
+* This code uses the [2021 Amazon Last Mile Routing Research Challenge Dataset](https://registry.opendata.aws/amazon-last-mile-challenges). Merchan, Daniel; Pachon, Julian; Arora, Jatin; Konduri, Karthik; Winkenbach, Matthias; Parks, Steven; Noszek, Joseph. (2022). Seattle: Amazon.com.
