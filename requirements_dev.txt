@@ -4,4 +4,5 @@ pandas==1.1.5
 tqdm==4.62.3
 pyarrow==7.0.0
 sagemaker==2.68.0
+utm
 ortools

@@ -81,20 +81,20 @@ The datasets contain package (aka *stop* ) information, such as destination loca
 train_data_dir=almrrc2021-data-training
 eval_data_dir=almrrc2021-data-evaluation
 
-# generate package information in Parquet (training)
+# generate package information in Parquet file (training)
 python preprocessing.py --act gen_route --data_dir  data/${train_data_dir}
 # generate travel time matrix for all stops in a route (training)
 python preprocessing.py --act gen_dist_mat --data_dir  data/${train_data_dir}
 # generate zone information for each stop (training)
 python preprocessing.py --act gen_zone_list --data_dir  data/${train_data_dir}
-# generate ground-truth zone sequence for each route
-python preprocessing.py --act gen_actual_zone --data_dir  data/${train_data_dir}
+# generate ground-truth zone sequence for each route using the Parquet file generated from `gen_route` action
+python preprocessing.py --act gen_actual_zone --data_dir  data/${train_data_dir} --pkfn ${parquet_file}
 # generate package information in Parquet (evaluation)
-python preprocessing.py --act gen_route --data_dir  data/${eval_data_dir}
+python preprocessing.py --act gen_route --data_dir  data/${eval_data_dir} --mode eval
 # generate travel time matrix for all stops in a route (evaluation)
-python preprocessing.py --act gen_dist_mat --data_dir  data/${eval_data_dir}
+python preprocessing.py --act gen_dist_mat --data_dir  data/${eval_data_dir} --mode eval
 # generate zone information for each stop (evaluation)
-python preprocessing.py --act gen_zone_list --data_dir  data/${eval_data_dir}
+python preprocessing.py --act gen_zone_list --data_dir  data/${eval_data_dir} --mode eval
 ```
 
 ## Step 4. Upload pre-processed data to S3
