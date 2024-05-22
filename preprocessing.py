@@ -266,9 +266,9 @@ def gen_all_routes(df_r, df_p, df_t, output_root_dir):
     dfpq = pd.concat(df_list)
     tm = int(time.time())
     try:
-        dfpq.to_parquet(os.path.join(output_root_dir, f"data/lmc_route_full_{tm}.parquet"), index=False)
+        dfpq.to_parquet(os.path.join(output_root_dir, f"lmc_route_full_{tm}.parquet"), index=False)
     except:
-        dfpq.to_csv(os.path.join(output_root_dir, f"data/lmc_route_full_{tm}.csv"), index=False)
+        dfpq.to_csv(os.path.join(output_root_dir, f"lmc_route_full_{tm}.csv"), index=False)
 
 
 def gen_distance_matrix(
