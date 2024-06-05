@@ -3,6 +3,6 @@ joblib
 pandas==1.1.5
 tqdm==4.66.3
 pyarrow==14.0.1
-sagemaker==2.68.0
+sagemaker==2.218.0
 utm
 ortools
