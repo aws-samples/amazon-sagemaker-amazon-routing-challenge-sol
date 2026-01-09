@@ -119,9 +119,9 @@ ${train_or_eval_data_dir}                # e.g. `Final_March_15_Data` OR `Final_
 ├── model_score_outputs/                 # output json score here
 ├── processed/                           # output processed parquet file here
 └── zone_list                            # A directory with all zone files
-    ├── ${route_id_0}_zone_w_st.joblib   # zone file produced by preprocessing.py            
+    ├── ${route_id_0}_zone_w_st.json   # zone file produced by preprocessing.py            
     ├── ...                              # more zone files
-    ├── ${route_id_N}_zone_w_st.joblib   # the last zone file
+    ├── ${route_id_N}_zone_w_st.json   # the last zone file
     └── actual_zone-{mode}.csv           # ground-truth zone sequence file produced 
                                          # by preprocessing.py
 ```
@@ -138,7 +138,7 @@ We upload the PPM model to S3 so that the subsequent SageMake processing job can
 ```bash
 # optional - set `${s3_model_prefix}` with your own S3 model prefix
 export s3_model_prefix=almrc 
-aws s3 cp aro_ppm_train_model.joblib s3://${bucket_name}/models/${s3_model_prefix}/
+aws s3 cp aro_ppm_train_model.json s3://${bucket_name}/models/${s3_model_prefix}/
 ```
 
 ## Step 7. Generate sequence locally as a test

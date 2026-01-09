@@ -1,7 +1,7 @@
 import argparse
 import time
 
-import joblib
+import json
 import pandas as pd
 
 from aro.model.ppm import build_ppm_model
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--ppm_model_fn", 
-        default="aro_ppm_train_model.joblib", 
+        default="aro_ppm_train_model.json", 
         type=str, 
         help="File name of the PPM model"
     )
@@ -25,7 +25,7 @@ if __name__ == "__main__":
     stt = time.time()
     ppm_model = build_ppm_model(train_zdf, 5, gt_strictly_set=True)
     dur = time.time() - stt
-    print(f'Time to train PPM = {dur:.3f} seconds')
     print('Saving the model to the current directory ...', end='')
-    joblib.dump(ppm_model, args.ppm_model_fn)
+    with open(args.ppm_model_fn, "w") as f:
+        json.dump(ppm_model.to_dict(), f)
     print('done')

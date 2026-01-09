@@ -136,6 +136,33 @@ class PPM(object):
 
         # deal witth order -1
         return self.neg_order_prob + np.sum(penalty_probs)
+    
+    def to_dict(self):
+        """Serialize PPM model to a JSON-safe dictionary."""
+        serialized_tables = []
+        for table in self.tables:
+            serialized_table = {}
+            for key, ctx in table.items():
+                serialized_table[key] = ctx.to_dict()
+            serialized_tables.append(serialized_table)
+        
+        return {
+            "nb_order": self.nb_order,
+            "vocab_size": self.vocab_size,
+            "tables": serialized_tables
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        """Deserialize PPM model from a dictionary."""
+        ppm = cls(data["nb_order"], data["vocab_size"])
+        ppm.tables = []
+        for serialized_table in data["tables"]:
+            table = {}
+            for key, ctx_data in serialized_table.items():
+                table[key] = Ctx.from_dict(ctx_data)
+            ppm.tables.append(table)
+        return ppm
 
 
 class Ctx(object):
@@ -167,6 +194,23 @@ class Ctx(object):
     @property
     def d(self):
         return len(self.entries)
+    
+    def to_dict(self):
+        """Serialize Ctx to a JSON-safe dictionary."""
+        return {
+            "key": self.key,
+            "n": self.n,
+            "entries": dict(self.entries)
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        """Deserialize Ctx from a dictionary."""
+        ctx = cls(data["key"])
+        ctx.n = data["n"]
+        for k, v in data["entries"].items():
+            ctx.entries[k] = v
+        return ctx
 
 def zone_sequence_gtset(gt_zone_seq, gt_zone_full_seq):
     nb_stops_seq = [] # record how many stops for each zone in zone_seq

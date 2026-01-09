@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import argparse
-import joblib
+import json
 import pandas as pd
 import os
 import time
@@ -86,9 +86,11 @@ if __name__ == "__main__":
     json_dict = dict()
     stt = time.time()
     
+    from aro.model.ppm import PPM
     mfn = f"{args.model_dir}/{args.ppm_model_fn}"
     if os.path.exists(mfn):
-        zone_prob_model = joblib.load(mfn)
+        with open(mfn, "r") as f:
+            zone_prob_model = PPM.from_dict(json.load(f))
     else:
         raise Exception(f'Cannot find {mfn}')
     for idx, route_id in enumerate(df_val.route_id.unique()):
@@ -102,9 +104,10 @@ if __name__ == "__main__":
         if os.path.exists(fn):
             pre_dist_matrix = np.load(fn)
 
-        zfn = f"{args.zone_list_dir}/{route_id}_zone_w_st.joblib"
-        if (os.path.exists(zfn)):
-            zone_list = joblib.load(zfn)
+    zfn = f"{args.zone_list_dir}/{route_id}_zone_w_st.json"
+    if (os.path.exists(zfn)):
+        with open(zfn, "r") as f:
+            zone_list = json.load(f)
             cw = [0.25, 0.25, 0.25, 0.25]
             zs_algo = 'ppm'
             sol_list = zone_based_tsp(

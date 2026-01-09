@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--ppm_model_fn", 
-        default="aro_ppm_train_model.joblib", 
+        default="aro_ppm_train_model.json", 
         type=str, 
         help="File name of the PPM model"
     )

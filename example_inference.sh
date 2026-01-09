@@ -4,7 +4,7 @@
 data_root=/home/ec2-user/SageMaker/almrc-sol/data/Final_June_18_Data
 current_dir=/home/ec2-user/SageMaker/almrc-sol
 python inference.py --model_dir ${current_dir} \
-    --ppm_model_fn aro_ppm_train_model.joblib \
+    --ppm_model_fn aro_ppm_train_model.json \
     --data_dir ${data_root}/processed \
     --data_fn lmc_route_full_1637316909.parquet \
     --output_dir ${data_root}/model_apply_outputs \

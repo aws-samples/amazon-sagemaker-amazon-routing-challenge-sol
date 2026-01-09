@@ -14,7 +14,7 @@ from scipy.spatial import distance
 from sklearn import manifold
 from sklearn.metrics.pairwise import haversine_distances
 from tqdm import tqdm
-import joblib
+import json
 
 """
 preprocess routes data for training the TSP model
@@ -337,7 +337,9 @@ def get_actual_zone(df_val, df_act_seq, df_r, data_dir, mode):
         df_sequence = sort_df_into_sequence(df_route)
         so_list = df_sequence.ind.values
         zfn = f"{data_dir}/zone_list/{route_id}_zone_w_st.joblib"
-        zone_list = joblib.load(zfn)
+        zfn = f"{data_dir}/zone_list/{route_id}_zone_w_st.json"
+        with open(zfn, "r") as f:
+            zone_list = json.load(f)
         actual_zone = [zone_list[x] for x in so_list]
         zone_seq = []
         full_zone_seq = []
@@ -397,7 +399,8 @@ def gen_zone_list(df_r, out_dir="data/zone_list"):
                 
                 zones[idx] = nn_zone
                 break
-        joblib.dump(zones, f"{out_dir}/{route_id}_zone_w_st.joblib")
+        with open(f"{out_dir}/{route_id}_zone_w_st.json", "w") as f:
+            json.dump(zones, f)
         #break # debug break
 
 if __name__ == "__main__":
