@@ -11,7 +11,7 @@ from aro.model.ortools_helper import run_ortools
 def sort_zones(orig_zone_list, prob_model, route_id, cluster_weights=[0.25, 0.25, 0.25, 0.25], algo='hzm'):
     """
     zone_list is a list (sequence) of zones sorted in a random (i.e. original order, like a set)
-        Simply pass in the `zone_list` from file: {zone_dir}/{route_id}_zone_w_st.joblib
+        Simply pass in the `zone_list` from file: {zone_dir}/{route_id}_zone_w_st.json
 
     return:
         1. an array of sorted zones as a new most "probable" sequence
@@ -26,7 +26,7 @@ def zone_based_tsp(
 ):
     """
     zone_list is a list (sequence) of zones sorted in a random (i.e. original order, like a set)
-        Simply pass in the `zone_list` from file: {zone_dir}/{route_id}_zone_w_st.joblib
+        Simply pass in the `zone_list` from file: {zone_dir}/{route_id}_zone_w_st.json
 
     Halo effect - use the mean distance from the current zone to other zones to "simulate" some psudo
     nodes (i.e. one psudo node per zone)

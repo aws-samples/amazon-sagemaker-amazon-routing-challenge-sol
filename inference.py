@@ -40,7 +40,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--zone_list_dir", required=True, type=str, 
-        help="Directory of zone_list, where files like RouteID_*_zone_w_st.joblib are"
+        help="Directory of zone_list, where files like RouteID_*_zone_w_st.json are"
     )
     parser.add_argument(
         "--output_dir", required=True, type=str, help="Directory of output"
@@ -89,8 +89,11 @@ if __name__ == "__main__":
     from aro.model.ppm import PPM
     mfn = f"{args.model_dir}/{args.ppm_model_fn}"
     if os.path.exists(mfn):
-        with open(mfn, "r") as f:
-            zone_prob_model = PPM.from_dict(json.load(f))
+        try:
+            with open(mfn, "r") as f:
+                zone_prob_model = PPM.from_dict(json.load(f))
+        except Exception as e:
+            raise Exception(f"Failed to load model '{mfn}': {e}")
     else:
         raise Exception(f'Cannot find {mfn}')
     for idx, route_id in enumerate(df_val.route_id.unique()):
@@ -104,22 +107,23 @@ if __name__ == "__main__":
         if os.path.exists(fn):
             pre_dist_matrix = np.load(fn)
 
-    zfn = f"{args.zone_list_dir}/{route_id}_zone_w_st.json"
-    if (os.path.exists(zfn)):
-        with open(zfn, "r") as f:
-            zone_list = json.load(f)
-            cw = [0.25, 0.25, 0.25, 0.25]
-            zs_algo = 'ppm'
-            sol_list = zone_based_tsp(
-                        pre_dist_matrix,
-                        zone_list,
-                        zone_prob_model,
-                        route_id,
-                        cluster_weights=cw,
-                        zone_sort_algo=zs_algo
-                    )
+        zfn = f"{args.zone_list_dir}/{route_id}_zone_w_st.json"
+        if (os.path.exists(zfn)):
+            with open(zfn, "r") as f:
+                zone_list = json.load(f)
+                cw = [0.25, 0.25, 0.25, 0.25]
+                zs_algo = 'ppm'
+                sol_list = zone_based_tsp(
+                            pre_dist_matrix,
+                            zone_list,
+                            zone_prob_model,
+                            route_id,
+                            cluster_weights=cw,
+                            zone_sort_algo=zs_algo
+                        )
         else:
             print(f'zone files missing: {zfn}')
+            continue
         rank_list = [-1] * len(sol_list)  # df_route.shape[0]
         for i, rank in enumerate(sol_list):
             try:
@@ -127,7 +131,7 @@ if __name__ == "__main__":
             except:
                 print(sol_list)
                 raise Exception(f"{i}, {rank}")
-        
+            
         df_route["myrank"] = rank_list
         df_route = df_route.sort_values(["stop"])
         sequence_dict = {}

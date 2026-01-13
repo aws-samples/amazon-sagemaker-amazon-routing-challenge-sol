@@ -336,7 +336,6 @@ def get_actual_zone(df_val, df_act_seq, df_r, data_dir, mode):
         
         df_sequence = sort_df_into_sequence(df_route)
         so_list = df_sequence.ind.values
-        zfn = f"{data_dir}/zone_list/{route_id}_zone_w_st.joblib"
         zfn = f"{data_dir}/zone_list/{route_id}_zone_w_st.json"
         with open(zfn, "r") as f:
             zone_list = json.load(f)
@@ -419,9 +418,9 @@ if __name__ == "__main__":
         ├── model_score_outputs/                    
         ├── processed/                              # output processed parquet file produced by action `gen_route`
         └── zone_list                               # A directory with all zone files
-            ├── {route_id_0}_zone_w_st.joblib       # zone file produced produced by action `gen_zone_list`            
+            ├── {route_id_0}_zone_w_st.json       # zone file produced produced by action `gen_zone_list`            
             ├── ...                                 
-            ├── {route_id_N}_zone_w_st.joblib        
+            ├── {route_id_N}_zone_w_st.json        
             └── actual_zone-{mode}.csv              # ground-truth zone sequence file produced by action `gen_actual_zone`
     """
     parser = argparse.ArgumentParser()
